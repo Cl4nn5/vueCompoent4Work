@@ -7,8 +7,21 @@
     <section class="cmp_date">
       <h3>날짜 선택</h3>
       <div class="date_row">
-        <div>일시</div>
+        <div class="col-6">string 일시</div>
         <SelectPicker :showSeconds="false" @setDateTime="getDateTime" />
+      </div>
+      <div class="date_row">
+        <div class="col-6">object 일시</div>
+        <SelectPicker :showSeconds="false" @setDateTime="getDateTime" :resultType="'object'" />
+      </div>
+    </section>
+
+    <section class="row mt-4">
+      <div class="col-3">
+        <h4>결과 보여줄 공간</h4>
+      </div>
+      <div>
+        <div ref="result"></div>
       </div>
     </section>
   </div>
@@ -17,6 +30,7 @@
 <script>
 import VHeader from "./components/vHeader.vue";
 import SelectPicker from "./components/utils/SelectPicker.vue";
+require('bootstrap')
 
 export default {
   name: "App",
@@ -27,12 +41,18 @@ export default {
   methods: {
     getDateTime(datetime){
       console.log(datetime);
+      this.showResult(datetime);
+    },
+    showResult(res){
+      res = typeof(res) == "object" ? JSON.stringify(res) : res;
+      this.$refs.result.innerHTML = res;
     }
   },
 };
 </script>
 
 <style lang="scss">
+@import "bootstrap";
 @import "./style/style.scss";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

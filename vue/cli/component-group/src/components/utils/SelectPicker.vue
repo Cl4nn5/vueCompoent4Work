@@ -1,21 +1,25 @@
 <template>
-  <section class="select_picker_date">
+  <section class="select_picker_date" :class="classData">
     <!-- 연월일 -->
-    <input type="date" class="input_year" :class="classData" v-model="date" />
+    <input
+      type="date"
+      max="9999-12-31"
+      class="input_year"
+      v-model="date"
+      @change="calcDateTime" />
     <div class="select_group" v-if="showHours">
       <!-- 시 -->
       <select
         name=""
         id=""
         class="sp_date sp_mm"
-        :class="timeClass"
+        :class="classTime"
         v-model="dateObj.hour"
-      >
+        @change="calcDateTime">
         <option
           v-for="(hour, idx) in listObj.hoursList"
           :value="hour"
-          :key="idx"
-        >
+          :key="idx">
           {{ hour }}
         </option>
       </select>
@@ -24,15 +28,14 @@
         name=""
         id=""
         class="sp_date sp_HH"
-        :class="timeClass"
+        :class="classTime"
         v-if="showMinutes"
         v-model="dateObj.minute"
-      >
+        @change="calcDateTime">
         <option
           v-for="(minute, idx) in listObj.minutesList"
           :value="minute"
-          :key="idx"
-        >
+          :key="idx">
           {{ minute }}
         </option>
       </select>
@@ -41,15 +44,14 @@
         name=""
         id=""
         class="sp_date sp_mm"
-        :class="timeClass"
+        :class="classTime"
         v-if="showMinutes && showSeconds"
         v-model="dateObj.second"
-      >
+        @change="calcDateTime">
         <option
           v-for="(second, idx) in listObj.secondsList"
           :value="second"
-          :key="idx"
-        >
+          :key="idx">
           {{ second }}
         </option>
       </select>
@@ -75,8 +77,8 @@ export default {
     showMinutes: { type: Boolean, default: true },
     showSeconds: { type: Boolean, default: false },
     // class :
-    classData: { type: String, default: "" },
-    timeClass: { type: String, default: "" },
+    classData: { type: String, default: "col-6" },
+    classTime: { type: String, default: "" },
     // resultType : String || Object
     resultType: { type: String, default: "string" },
   },
@@ -109,29 +111,7 @@ export default {
     };
   },
   computed: {
-    calcDateTime() {
-      // 가독성을 위한 선언부
-      let year = this.dateObj.year;
-      let month = this.dateObj.month;
-      let day = this.dateObj.day;
-      let hour = this.dateObj.hour;
-      let minute = this.dateObj.minute;
-      let second = this.dateObj.second;
-
-      let resDateTime = "";
-
-      if (this.resultType.toLowerCase() == "string") {
-        resDateTime =
-          `${year}-${month}-${day}` +
-          (this.showHours ? ` ${hour}:${minute}:${second}` : "");
-      }else if(this.resultType.toLowerCase() == "object"){
-        resDateTime = this.dateObj;
-      }
-
-      this.$emit("setDateTime", resDateTime);
-
-      return resDateTime;
-    },
+    
   },
   watch: {
     dateObj: {
@@ -166,6 +146,30 @@ export default {
         const second = i * this.intervalObj.diffSecond;
         this.listObj.secondsList[i] = second < 10 ? "0" + second : "" + second;
       }
+    },
+
+    calcDateTime() {
+      // 가독성을 위한 선언부
+      let year = this.dateObj.year;
+      let month = this.dateObj.month;
+      let day = this.dateObj.day;
+      let hour = this.dateObj.hour;
+      let minute = this.dateObj.minute;
+      let second = this.dateObj.second;
+
+      let resDateTime = "";
+
+      if (this.resultType.toLowerCase() == "string") {
+        resDateTime =
+          `${year}-${month}-${day}` +
+          (this.showHours ? ` ${hour}:${minute}:${second}` : "");
+      }else if(this.resultType.toLowerCase() == "object"){
+        resDateTime = this.dateObj;
+      }
+
+      this.$emit("setDateTime", resDateTime);
+
+      return resDateTime;
     },
   },
   created() {
