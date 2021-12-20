@@ -21,7 +21,7 @@
         <h4>결과 보여줄 공간</h4>
       </div>
       <div>
-        <div ref="result"></div>
+        <textarea class="w-75" readonly ref="result"></textarea>
       </div>
     </section>
   </div>

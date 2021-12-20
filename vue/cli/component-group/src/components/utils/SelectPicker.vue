@@ -95,9 +95,9 @@ export default {
       },
       date: "",
       listObj: {
-        hoursList: [""],
-        minutesList: [""],
-        secondsList: [""],
+        hoursList: [],
+        minutesList: [],
+        secondsList: [],
       },
       //  {
       //   showHours: true,
